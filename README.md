@@ -1,8 +1,6 @@
-# ConveyorV2-core
+XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks by enforcing the correct ordering of incoming transactions.
 
-ConveyorV2 operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks by enforcing the correct ordering of incoming transactions.
-
-This repo contains the smart contracts of ConveyorV2, which was originally forked from [uniswap-v2-core](https://github.com/Uniswap/uniswap-v2-core).
+This repo contains the smart contracts of XATA, which was originally forked from [uniswap-v2-core](https://github.com/Uniswap/uniswap-v2-core).
 
 ## Development
 
@@ -47,14 +45,6 @@ Note: Store private keys in the `.env` file. Do not commit this file or you will
 |Network|Description|
 |---|---|
 |`hardhat`|Local ETH fork|
-
-### Integrating Testing On Tenderly Forks
-
-|Network|Description|
-|---|---|
-|`eth_tenderly`|Ethereum fork|
-|`matic_tenderly`|Polygon PoS fork|
-|`bsc_tenderly`|Binance Smart Chain fork|
 
 ### Main nets
 
