@@ -139,3 +139,14 @@ export async function loadERC20instance(address: string, signer?: Signer): Promi
   }
   return new ethers.Contract(address, erc20Abi, signer);
 }
+
+export async function sendEth(from: SignerWithAddress, to: SignerWithAddress, amount: BigNumber) {
+  await from.sendTransaction({
+    to: to.address,
+    value: amount,
+  });
+}
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

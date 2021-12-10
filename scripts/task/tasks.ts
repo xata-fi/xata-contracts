@@ -53,7 +53,7 @@ task('assign-owner', 'Transfer the ownership of an implementation contract to a 
       .connect(deployer)
       .estimateGas.functionCall(implementationAddr, transferOwnershipData);
     const gasLimit = args.gaslimit || estimatedGasLimit;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await deployerContract
@@ -79,7 +79,7 @@ task('add-relayer', 'Adds an authorized relayer')
     const routerContract = await hre.ethers.getContractAt('ConveyorV2Router01', ROUTER_ADDRESS);
     const estimatedGas = await routerContract.connect(owner).estimateGas.setRelayer(relayerAddr, true);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract
@@ -106,7 +106,7 @@ task('remove-relayer', 'Remove a relayer')
     const routerContract = await hre.ethers.getContractAt('ConveyorV2Router01', ROUTER_ADDRESS);
     const estimatedGas = await routerContract.connect(owner).estimateGas.setRelayer(relayerAddr, false);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract
@@ -131,7 +131,7 @@ task('set-router', 'Configure the router address in the factory')
     const factoryContract = await hre.ethers.getContractAt('ConveyorV2Factory', FACTORY_ADDRESS);
     const estimatedGas = await factoryContract.connect(owner).estimateGas.setRouter(routerAddr);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await factoryContract.connect(owner).setRouter(routerAddr, { gasLimit: gasLimit, gasPrice: gasPrice });
@@ -155,7 +155,7 @@ task('set-gas-fee-holder', 'Configures an address for collecting gas fee')
     const feeHolderAddr = args.addr || owner.address;
     const estimatedGas = await routerContract.connect(owner).estimateGas.setFeeHolder(feeHolderAddr);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract
@@ -180,7 +180,7 @@ task('set-constant-gas', 'Sets the constant base gas, defaults at 21000')
     const argGas = args.gas || '21000';
     const estimatedGas = await routerContract.connect(owner).estimateGas.setConstantFee(argGas);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract.connect(owner).setConstantFee(argGas, { gasLimit: gasLimit, gasPrice: gasPrice });
@@ -204,7 +204,7 @@ task('set-transfer-gas', 'Sets the transfer gas, defaults at 65000')
     const argGas = args.gas || '65000';
     const estimatedGas = await routerContract.connect(owner).estimateGas.setTransferFee(argGas);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract.connect(owner).setTransferFee(argGas, { gasLimit: gasLimit, gasPrice: gasPrice });
@@ -226,7 +226,7 @@ task('meta', 'Toggles meta-transaction')
     const routerContract = await hre.ethers.getContractAt('ConveyorV2Router01', ROUTER_ADDRESS);
     const estimatedGas = await routerContract.connect(owner).estimateGas.metaSwitch();
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await routerContract.connect(owner).metaSwitch({ gasLimit: gasLimit, gasPrice: gasPrice });
@@ -266,7 +266,7 @@ task('deploy-factory', 'Deploy a factory')
       .connect(deployer)
       .estimateGas.deploy(factoryBytecode, factoryInitCode, FACTORY_SALT);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await create2
@@ -305,7 +305,7 @@ task('deploy-router', 'Deploy a new router')
       .connect(deployer)
       .estimateGas.deploy(routerBytecode, routerInitcode, ROUTER_SALT);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await create2
@@ -331,7 +331,7 @@ task('set-fee-to', 'Sets the fee-to address - the recipient of mintFee')
 
     const estimatedGas = await factoryContract.connect(owner).estimateGas.setFeeTo(args.address!);
     const gasLimit = args.gaslimit || estimatedGas;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const tx = await factoryContract
@@ -362,7 +362,7 @@ task('create2', 'Deploy the CREATE2 contract')
     }
 
     const gasLimit = args.gaslimit ? BigNumber.from(args.gaslimit) : undefined;
-    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : (await hre.ethers.provider.getGasPrice());
+    const gasPrice = args.gasprice ? BigNumber.from(args.gasprice) : await hre.ethers.provider.getGasPrice();
 
     try {
       const create2Instance = await create2Factory.connect(deployer).deploy({ gasLimit: gasLimit, gasPrice: gasPrice });
