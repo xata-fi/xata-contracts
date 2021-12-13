@@ -1,8 +1,5 @@
 # XATA
-XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks by enforcing the correct ordering of incoming transactions.
-
-This repo contains the smart contracts of XATA, which was originally forked from [uniswap-v2-core](https://github.com/Uniswap/uniswap-v2-core).
-The MultiRewardPool is for issuing LP staking incentives.
+XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks. This is possible because XATA contracts benefit from using the [Conveyor](https://www.ata.network/conveyor) technology to enforce correct transaction ordering. 
 
 ## Development
 
@@ -62,6 +59,10 @@ Note: Infura/Alchemy API keys must be configured in the `.env` file.
 
 ## Contracts
 
+The primary DEX contracts are in the `contracts` folder.
+Reward contracts are in the `contracts/rewards/` folder.
+
+### Deployed Contracts
 Contracts are deployed to the following addresses.
 
 |Contract|Address|Network|
@@ -69,3 +70,5 @@ Contracts are deployed to the following addresses.
 |ConveyorV2Factory|`0x5f8017621825BC10D63d15C3e863f893946781F7`|BSC, Polygon|
 |ConveyorV2Router01|`0xe4C5Cf259351d7877039CBaE0e7f92EB2Ab017EB`|BSC, Polygon|
 |Create2Deployer|`0x92CACc70175Dc0fE30B44eaddaD03bF551aCB430`|BSC, Polygon|
+
+RewardPool contracts for farming are documented on our [docs page](https://docs.xata.fi/xata/smart-contracts).
