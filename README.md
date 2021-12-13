@@ -20,6 +20,7 @@ This repository is developed using [hardhat](https://hardhat.org/) and more comm
 ```shell
 yarn hardhat
 ```
+To prepare for tests, please provide a JSON-RPC url in hardhat.config.ts under commented out 'url' field for hardhat network. We plan to remove this testing dependency, but this needs to be done before the tests can run.
 
 To run tests from the `test/` directory, run
 

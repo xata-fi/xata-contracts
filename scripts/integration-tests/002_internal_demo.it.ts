@@ -1,12 +1,11 @@
 import { network, ethers, artifacts } from 'hardhat';
-import { IERC20 } from '../../typechain';
-import { deployMultiRewardPool } from '../deploy/003_multirewardpool';
+import { printDeploymentLogs, getAccounts, sendEth, delay } from '../../lib/utils';
+import { IERC20, MultiRewardPool, MultiRewardPool__factory } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { BigNumber } from 'ethers';
+import { BigNumber, ContractTransaction } from 'ethers';
 
 /**
- * This script is intended for demo testing, kept in here for record purposes.
- * Will need refactoring for this to work with the new deploy function.
+ * This script is intended for demo testing
  */
 
 // ----- Parameters for testing reward pool ------ //
@@ -55,6 +54,20 @@ async function fundAccounts(testTokenProvider: SignerWithAddress) {
   console.log('Finished funding accounts');
 }
 
+export async function deployMultiRewardPool(stakingTokenAddress: string, verbose = false): Promise<MultiRewardPool> {
+  const name = 'MultiRewardPool';
+  const { deployer, owner } = await getAccounts();
+  const multiRewardPoolContract = (await ethers.getContractFactory(name)) as MultiRewardPool__factory;
+  const instance = (await multiRewardPoolContract.connect(deployer).deploy(stakingTokenAddress)) as MultiRewardPool;
+  await instance.deployed();
+  await instance.transferOwnership(owner.address);
+  const deploymentTx = instance.deployTransaction;
+  if (verbose) {
+    printDeploymentLogs(name, instance.address, deploymentTx.hash);
+  }
+  return instance;
+}
+
 async function runIntegrationTest(rewardPoolParams: RewardPoolParams[]) {
   // ---------- Setup Parameters ------------ //
   const SECONDS_IN_A_DAY = 86400; // in seconds
@@ -63,7 +76,7 @@ async function runIntegrationTest(rewardPoolParams: RewardPoolParams[]) {
   const ierc20Artifact = await artifacts.readArtifact('IERC20');
 
   // ---------- Setup Test State ------------ //
-  await fundAccounts(testTokenProvider);
+  // await fundAccounts(testTokenProvider);
 
   for (const eachPool of rewardPoolParams) {
     const multiRewardPool = await deployMultiRewardPool(eachPool.stakingTokenAddress, true);
