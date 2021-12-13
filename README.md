@@ -71,4 +71,4 @@ Contracts are deployed to the following addresses.
 |ConveyorV2Router01|`0xe4C5Cf259351d7877039CBaE0e7f92EB2Ab017EB`|BSC, Polygon|
 |Create2Deployer|`0x92CACc70175Dc0fE30B44eaddaD03bF551aCB430`|BSC, Polygon|
 
-Farming contracts are documented on our (docs page)[https://docs.xata.fi/xata/smart-contracts].
+Farming contracts are documented on our [docs page](https://docs.xata.fi/xata/smart-contracts).
