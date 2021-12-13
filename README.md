@@ -1,8 +1,6 @@
 # XATA
 XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks. This is possible because XATA contracts benefit from using the Conveyor technology to enforce correct transaction ordering. 
 
-The MultiRewardPool is for issuing LP staking incentives.
-
 ## Development
 
 Run the following command to install all dependencies.
@@ -61,6 +59,10 @@ Note: Infura/Alchemy API keys must be configured in the `.env` file.
 
 ## Contracts
 
+The primary DEX contracts are in the `contracts` folder.
+Reward contracts are in the `contracts/rewards/` folder.
+
+### Deployed Contracts
 Contracts are deployed to the following addresses.
 
 |Contract|Address|Network|
