@@ -1,5 +1,5 @@
 # XATA
-XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks. This is possible because XATA contracts benefit from using the Conveyor technology to enforce correct transaction ordering. 
+XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks. This is possible because XATA contracts benefit from using the [Conveyor](https://www.ata.network/conveyor) technology to enforce correct transaction ordering. 
 
 ## Development
 
