@@ -1,7 +1,6 @@
 # XATA
-XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks by enforcing the correct ordering of incoming transactions.
+XATA operates as an independent decentralised exchange protocol that prevents MEV and sandwich attacks. This is possible because XATA contracts benefit from using the Conveyor technology to enforce correct transaction ordering. 
 
-This repo contains the smart contracts of XATA, which was originally forked from [uniswap-v2-core](https://github.com/Uniswap/uniswap-v2-core).
 The MultiRewardPool is for issuing LP staking incentives.
 
 ## Development
