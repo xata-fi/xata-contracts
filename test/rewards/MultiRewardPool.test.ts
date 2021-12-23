@@ -3,6 +3,7 @@ import { ethers, network } from 'hardhat';
 import { use, expect, assert } from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { resetNetwork } from '../../lib/utils';
+import { BigNumber } from 'ethers';
 
 const DURATION = 864000;
 const TIMEOUT = 10 * 60 * 1000;
@@ -389,6 +390,23 @@ describe('MultiRewardPool', async () => {
     const funder1Balance = await rewardToken1.balanceOf(funder1.address);
     const tx = pool.connect(funder1).notifyRewardAmount(rewardToken1.address, funder1Balance.toNumber() + 1000);
     await expect(tx).to.be.revertedWith('ERC20: transfer amount exceeds balance');
+  });
+
+  it('Reverts during funding, if the provided reward is greater than the overflow allowance.', async () => {
+    const { funder1, pool, rewardToken1 } = await setupNotifyRewardTests();
+    await rewardToken1.mint(
+      funder1.address,
+      BigNumber.from('100000000000000000000000000000000000000000000000000000000000000000000000000000'),
+    );
+    await rewardToken1
+      .connect(funder1)
+      .approve(
+        pool.address,
+        BigNumber.from('110000000000000000000000000000000000000000000000000000000000000000000000000000'),
+      );
+    const funder1Balance = await rewardToken1.balanceOf(funder1.address);
+    const tx = pool.connect(funder1).notifyRewardAmount(rewardToken1.address, funder1Balance);
+    await expect(tx).to.be.revertedWith('RewardRate is too high');
   });
 
   it('Allow delegated rewardDistributionAddress to increase rewards', async () => {
