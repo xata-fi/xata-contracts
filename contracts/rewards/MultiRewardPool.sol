@@ -158,16 +158,20 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
         );
 
         // Effects
+        uint256 newRewardRate = 0;
+        uint256 rewardDuration = rewardData[_rewardsToken].rewardsDuration;
         if (block.timestamp >= rewardData[_rewardsToken].periodFinish) {
-            rewardData[_rewardsToken].rewardRate = reward / rewardData[_rewardsToken].rewardsDuration;
+            newRewardRate = reward / rewardDuration;
         } else {
             uint256 remaining = rewardData[_rewardsToken].periodFinish - block.timestamp;
             uint256 leftover = remaining * rewardData[_rewardsToken].rewardRate;
-            rewardData[_rewardsToken].rewardRate = (reward + leftover) / rewardData[_rewardsToken].rewardsDuration;
+            newRewardRate = (reward + leftover) / rewardDuration;
         }
+        require(newRewardRate * rewardDuration < type(uint256).max / 1e18, 'RewardRate is too high'); // Reverts if the number will overflow during calculation of rewardPerToken()
+        rewardData[_rewardsToken].rewardRate = newRewardRate;
 
         rewardData[_rewardsToken].lastUpdateTime = block.timestamp;
-        rewardData[_rewardsToken].periodFinish = block.timestamp + rewardData[_rewardsToken].rewardsDuration;
+        rewardData[_rewardsToken].periodFinish = block.timestamp + rewardDuration;
 
         emit RewardAdded(reward);
         // handle the transfer of reward tokens via `transferFrom` to reduce the number
