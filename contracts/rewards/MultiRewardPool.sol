@@ -118,7 +118,6 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
         uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransferFrom(msg.sender, address(this), amount);
         uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
-        require(poolBalanceAfter > poolBalanceBefore, 'Pool balance did not increase');
         require(poolBalanceAfter - poolBalanceBefore == amount, 'Discrepancy in amount received');
     }
 
@@ -131,7 +130,6 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
         uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransfer(msg.sender, amount);
         uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
-        require(poolBalanceAfter < poolBalanceBefore, 'Pool balance did not decrease');
         require(poolBalanceBefore - poolBalanceAfter == amount, 'Discrepancy in amount sent');
     }
 

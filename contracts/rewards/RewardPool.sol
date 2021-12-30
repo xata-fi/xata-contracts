@@ -105,7 +105,6 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransferFrom(msg.sender, address(this), amount);
         uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
-        require(poolBalanceAfter > poolBalanceBefore, 'invalid bal');
         require(poolBalanceAfter - poolBalanceBefore == amount, 'invalid amt');
         emit Staked(msg.sender, amount);
     }
@@ -118,7 +117,6 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransfer(msg.sender, amount);
         uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
-        require(poolBalanceAfter < poolBalanceBefore, 'invalid bal');
         require(poolBalanceBefore - poolBalanceAfter == amount, 'invalid amt');
         emit Withdrawn(msg.sender, amount);
     }
