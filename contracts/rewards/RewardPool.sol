@@ -13,6 +13,7 @@ import "../interfaces/IRewardPool.sol";
 import "./RewardsDistributionRecipient.sol";
 
 /// @title A RewardPool holds reward tokens and allow stakers of a chosen ERC-20 token to claim rewards for staking over a period of time.
+/// @dev Do note that we're relying on integer overflow/underflow checks provided by solidity version 0.8.0. Care should be taken if you are using this contract with a solidity version before 0.8.0.
 contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 

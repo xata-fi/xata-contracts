@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 // Based on SNX's StakingRewards.sol https://github.com/Synthetixio/synthetix/blob/v2.52.0-alpha/contracts/StakingRewards.sol, updated for sol 0.8.0
 /// @title A RewardPool holds reward tokens and allow stakers of a chosen ERC-20 token to claim rewards for staking over a period of time.
+/// @dev Do note that we're relying on integer overflow/underflow checks provided by solidity version 0.8.0. Care should be taken if you are using this contract with a solidity version before 0.8.0.
 contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
     using SafeERC20 for IERC20;
 
