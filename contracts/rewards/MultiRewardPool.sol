@@ -37,6 +37,7 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
 
     /* ========== CONSTRUCTOR ========== */
 
+    /// @notice Take care that deflationary tokens or tokens with exotic transfer mechanisms are not supported.
     constructor(address _stakingToken) {
         stakingToken = IERC20(_stakingToken);
     }
@@ -114,7 +115,11 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
         _totalSupply = _totalSupply + amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;
         emit Staked(msg.sender, amount);
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransferFrom(msg.sender, address(this), amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceAfter > poolBalanceBefore, 'Pool balance did not increase');
+        require(poolBalanceAfter - poolBalanceBefore == amount, 'Discrepancy in amount received');
     }
 
     /// @notice Unstake LP tokens from the pool.
@@ -123,7 +128,11 @@ contract MultiRewardPool is ReentrancyGuard, Pausable, Ownable {
         _totalSupply = _totalSupply - amount;
         _balances[msg.sender] = _balances[msg.sender] - amount;
         emit Withdrawn(msg.sender, amount);
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransfer(msg.sender, amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceAfter < poolBalanceBefore, 'Pool balance did not decrease');
+        require(poolBalanceBefore - poolBalanceAfter == amount, 'Discrepancy in amount sent');
     }
 
     /// @notice Transfers earned rewards to msg.sender

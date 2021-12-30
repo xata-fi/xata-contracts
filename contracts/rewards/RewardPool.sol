@@ -102,7 +102,11 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         require(amount > 0, "Cannot stake 0");
         _totalSupply = _totalSupply + amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransferFrom(msg.sender, address(this), amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceAfter > poolBalanceBefore, 'invalid bal');
+        require(poolBalanceAfter - poolBalanceBefore == amount, 'invalid amt');
         emit Staked(msg.sender, amount);
     }
 
@@ -111,7 +115,11 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         require(amount > 0, "Cannot withdraw 0");
         _totalSupply = _totalSupply - amount;
         _balances[msg.sender] = _balances[msg.sender] - amount;
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransfer(msg.sender, amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceAfter < poolBalanceBefore, 'invalid bal');
+        require(poolBalanceBefore - poolBalanceAfter == amount, 'invalid amt');
         emit Withdrawn(msg.sender, amount);
     }
 
@@ -168,7 +176,7 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
     function setRewardsDuration(uint256 _rewardsDuration) external onlyOwner {
         require(
             block.timestamp > periodFinish,
-            "Previous rewards period must be complete before changing the duration for the new period"
+            "Previous rewards period must be complete"
         );
         rewardsDuration = _rewardsDuration;
         emit RewardsDurationUpdated(rewardsDuration);
