@@ -353,7 +353,7 @@ describe('RewardPool', async () => {
     const tx = pool.setRewardsDuration(30);
 
     await expect(tx).to.be.revertedWith(
-      'Previous rewards period must be complete before changing the duration for the new period',
+      'Previous rewards period must be complete',
     );
   });
 

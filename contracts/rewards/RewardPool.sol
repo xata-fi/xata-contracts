@@ -13,6 +13,7 @@ import "../interfaces/IRewardPool.sol";
 import "./RewardsDistributionRecipient.sol";
 
 /// @title A RewardPool holds reward tokens and allow stakers of a chosen ERC-20 token to claim rewards for staking over a period of time.
+/// @dev Do note that we're relying on integer overflow/underflow checks provided by solidity version 0.8.0. Care should be taken if you are using this contract with a solidity version before 0.8.0.
 contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 
@@ -102,7 +103,10 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         require(amount > 0, "Cannot stake 0");
         _totalSupply = _totalSupply + amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransferFrom(msg.sender, address(this), amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceAfter - poolBalanceBefore == amount, 'invalid amt');
         emit Staked(msg.sender, amount);
     }
 
@@ -111,7 +115,10 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
         require(amount > 0, "Cannot withdraw 0");
         _totalSupply = _totalSupply - amount;
         _balances[msg.sender] = _balances[msg.sender] - amount;
+        uint256 poolBalanceBefore = stakingToken.balanceOf(address(this));
         stakingToken.safeTransfer(msg.sender, amount);
+        uint256 poolBalanceAfter = stakingToken.balanceOf(address(this));
+        require(poolBalanceBefore - poolBalanceAfter == amount, 'invalid amt');
         emit Withdrawn(msg.sender, amount);
     }
 
@@ -168,7 +175,7 @@ contract RewardPool is IRewardPool, RewardsDistributionRecipient, ReentrancyGuar
     function setRewardsDuration(uint256 _rewardsDuration) external onlyOwner {
         require(
             block.timestamp > periodFinish,
-            "Previous rewards period must be complete before changing the duration for the new period"
+            "Previous rewards period must be complete"
         );
         rewardsDuration = _rewardsDuration;
         emit RewardsDurationUpdated(rewardsDuration);
